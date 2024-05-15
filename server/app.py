@@ -34,9 +34,22 @@ class Plants(Resource):
 api.add_resource(Plants, "/plants")
 
 
-class PlantByID(Resource):
-    pass
+class PlantById(Resource):
+    def get(self, plant_id):
+        plant = Plant.query.get(plant_id)
+        if not plant:
+            return jsonify({"error": "Plant not found"}), 404
+        return jsonify(
+            {
+                "id": plant.id,
+                "name": plant.name,
+                "image": plant.image,
+                "price": plant.price,
+            }
+        )
 
+
+api.add_resource(PlantById, "/plants/<int:plant_id>")
 
 if __name__ == "__main__":
     app.run(port=5555, debug=True)
